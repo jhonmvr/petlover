@@ -1,18 +1,41 @@
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 public class TinderPetLover {
 	static Integer totalMascotas = 0;
+	static String archivoUbicacion = "C:\\TINDER_PET_LOVER\\Mascota.txt";
+
+	static void contarRegistros() {
+		FileReader fr;
+		try {
+			fr = new FileReader(archivoUbicacion);
+			BufferedReader bf = new BufferedReader(fr);
+			Integer lNumeroLineasVacias = 0;
+			String line;
+			while ((line= bf.readLine()) != null) {
+				if (!line.equals("")) {
+					lNumeroLineasVacias++;
+				}
+			}
+			totalMascotas = lNumeroLineasVacias;
+			//System.out.print("numero de registro" + totalMascotas);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 	public static void main(String[] args) {
 		int x = 10;
+		System.out.println("Bienvenido a Tinder Pet Match");
+		System.out.println("Tinder para mascotas");
 		Scanner leer = new Scanner(System.in);
 		while (x != 0) {
-			System.out.println("Bienvenido a Tinder Pet Match");
-			System.out.println("Tinder para mascotas");
+			contarRegistros();
 			System.out.println("MENU:");
 
 			System.out.println("1.- Registro");
@@ -28,14 +51,21 @@ public class TinderPetLover {
 			}
 			case 2: {
 
-				System.out.println("Usted eligió la opcion 2.");
+				listarMascotas();
 
 				break;
 
 			}
 			case 3: {
 
-				System.out.println("Usted eligió la opcion 3.");
+				hacerMatch();
+
+				break;
+
+			}
+			case 0: {
+
+				System.out.println("SALIR.");
 
 				break;
 
@@ -50,6 +80,50 @@ public class TinderPetLover {
 		}
 
 		// TODO Auto-generated method stub
+
+	}
+
+	private static void hacerMatch() {
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+	static void listarMascotas() {
+		try {
+			FileReader reader = new FileReader(archivoUbicacion);
+			BufferedReader bufferedReader = new BufferedReader(reader);
+
+			String line;
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("ID");
+			buffer.append("\t");
+			buffer.append("Nombre");
+			buffer.append("\t");
+	        buffer.append("Tipo");
+	        buffer.append("\t");
+	        buffer.append("Raza");
+	        buffer.append("\t");
+			buffer.append("Edad");
+			buffer.append("\t");
+			buffer.append("EstadoMatch");
+			buffer.append("\t");
+			buffer.append("Observacion");
+			buffer.append("\t");
+			buffer.append("Propietario");
+			buffer.append("\t");
+			buffer.append("MatchMascota");
+			buffer.append("\n");
+			System.out.println(buffer.toString());
+
+			while ((line = bufferedReader.readLine()) != null) {
+				System.out.println(line);
+			}
+			reader.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -78,29 +152,14 @@ public class TinderPetLover {
 	}
 
 	static void guardarMascota(Mascota mascota) {
-		ObjectOutputStream outputStream = null;
+
 		try {
-			outputStream = new ObjectOutputStream(new FileOutputStream("C:\\WORKSPACE\\CHANDRESH\\TINDER_PET_LOVER\\Mascota.txt"));
-			System.out.print(mascota.toString());
-			outputStream.writeObject(mascota);
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			FileWriter writer = new FileWriter(archivoUbicacion, true);
+			writer.write(mascota.toString());
+			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
-            //Close the ObjectOutputStream
-            try {
-                if (outputStream != null) {
-                    outputStream.flush();
-                    outputStream.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
+		}
 
 	}
 
